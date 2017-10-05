@@ -15,10 +15,10 @@ def hough_transform_plots(image, use_probabilistic=False):
     fig, axes = plt.subplots(1, 3, figsize=(15, 5), )
     ax = axes.ravel()
 
-    ax[0].imshow(image)
+    ax[0].imshow(image, cmap=plt.gray())
     ax[0].set_title('Input image')
 
-    ax[1].imshow(edges)
+    ax[1].imshow(edges, cmap=plt.gray())
     ax[1].set_title('Canny edges')
 
     if use_probabilistic:
