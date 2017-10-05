@@ -1,0 +1,16 @@
+################################################################################
+#
+#   Files for git to ignore
+#
+################################################################################
+
+# MacOS files
+.DS_Store
+
+# Compiled Python modules
+*.pyc
+*.so
+*.pyd
+
+# ipython checkpoints
+**/.ipynb_checkpoints/**
