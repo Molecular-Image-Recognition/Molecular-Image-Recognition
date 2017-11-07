@@ -48,7 +48,6 @@ class LineSegment:
         dists += [L.getShortestDistToPoint(pt) for pt in self.pts]
         dists += [L.pts[0].getDistance(pt) for pt in self.pts]
         dists += [L.pts[1].getDistance(pt) for pt in self.pts]
-        print dists
         return min(dists)
     
     def getDifference(self,L):
@@ -62,7 +61,7 @@ class LineSegment:
             y = self.m*x+self.b
             return Point(x,y)
     
-    def breakAtItersection(self,L):
+    def breakAtIntersection(self,L):
         pt = self.getIntersection(L)
         if pt and self.pointIn(pt):
             lines = [LineSegment(self.pts[0],pt),LineSegment(self.pts[1],pt),LineSegment(L.pts[1],pt),LineSegment(L.pts[1],pt)]
@@ -70,7 +69,7 @@ class LineSegment:
         else:
             return [self]
         
-    def extendToItersection(self,L):
+    def extendToIntersection(self,L):
         pt = self.getItersection(L)
         if pt:
             dist = [pt.getDistance(lpt) for lpt in self.pts]
