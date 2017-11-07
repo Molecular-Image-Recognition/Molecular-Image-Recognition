@@ -17,7 +17,7 @@ class LineSegment:
         self.pts = pts
         self.m = (pts[1].y-pts[0].y)/(pts[1].x-pts[0].x)
         self.b = self.pts[0].y-self.m*self.pts[0].x
-        self.theta = abs(np.arctan(self.m))
+        self.theta = np.arctan(self.m)*(180.0/np.pi)
         xs = [pt.x for pt in pts]
         #ys = [pt.y for pt in pts]
         self.xmin = min(xs)
