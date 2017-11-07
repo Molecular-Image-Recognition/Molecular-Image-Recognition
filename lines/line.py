@@ -64,12 +64,23 @@ class LineSegment:
     
     def breakAtItersection(self,L):
         pt = self.getIntersection(L)
-        if pt:
-            lines = [LineSegment(self.pts[0],pt),LineSegment(self.pts[1],pt)]
+        if pt and self.pointIn(pt):
+            lines = [LineSegment(self.pts[0],pt),LineSegment(self.pts[1],pt),LineSegment(L.pts[1],pt),LineSegment(L.pts[1],pt)]
             return lines
         else:
             return [self]
-
+        
+    def extendToItersection(self,L):
+        pt = self.getItersection(L)
+        if pt:
+            dist = [pt.getDistance(lpt) for lpt in self.pts]
+            indself = dist.index(min(dist))
+            dist = [pt.getDistance(lpt) for lpt in L.pts]
+            indL = dist.index(min(dist))
+            return [LineSegment(pt,self.pts[indself]),LineSegment(pt,L.pts[indL])]
+        else:
+            return [self,L]
+        
 def combineLines(lines):
     xs = []
     ys = []
@@ -109,5 +120,5 @@ def combineLines(lines):
         else:
             pt2 = Point((ymin-b)/m,ymin)
     
-    return Line([pt1,pt2])
+    return LineSegment([pt1,pt2])
 
