@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 # Code below modified from code at  http://scikit-image.org/docs/dev/auto_examples/edges/plot_line_hough_transform.html
 
-def hough_transform_plots(image, use_probabilistic=False):
+def hough_transform_plots(image, use_probabilistic=True):
     edges = canny(image)
 
     h, theta, d = hough_line(edges)
