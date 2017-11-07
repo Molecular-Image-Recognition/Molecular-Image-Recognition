@@ -1,13 +1,17 @@
 import numpy as np
 from skimage.transform import hough_line, hough_line_peaks, probabilistic_hough_line
 from skimage.feature import canny
+from skimage.io import imread
 import matplotlib.pyplot as plt
 
 
 # Code below modified from code at  http://scikit-image.org/docs/dev/auto_examples/edges/plot_line_hough_transform.html
 
-def hough_transform_plots(image, use_probabilistic=True):
-    edges = canny(image)
+def hough_transform_plots(image_path, use_probabilistic=True, use_canny=True):
+
+    edges = _load_image(image_path, use_canny)
+
+    image = imread(image_path)
 
     h, theta, d = hough_line(edges)
     lines = probabilistic_hough_line(edges)
@@ -47,3 +51,18 @@ def hough_transform_plots(image, use_probabilistic=True):
 
     plt.tight_layout()
     plt.show()
+
+
+def get_hough_lines(image_path, use_canny=True):
+    edges = _load_image(image_path, use_canny)
+    return probabilistic_hough_line(edges)
+
+
+def _load_image(image_path, use_canny):
+    image = imread(image_path, as_grey=True)
+
+    if use_canny:
+        edges = canny(image)
+    else:
+        edges = image
+    return edges

@@ -1,8 +1,12 @@
-from skimage import io
 import os
-from image_process.hough_transform import hough_transform_plots
+from image_process.hough_transform import hough_transform_plots, get_hough_lines
 
-image = io.imread(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'hough_test', 'hexagon.JPG'),
-                  as_grey=True)
+# image = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'hough_test', 'hexagon.JPG')
+
+image = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'hough_test', 'Test_Set_1', 'PNGs',
+                     'C(C)C(CCCC)(C)C.png')
 
 hough_transform_plots(image)
+
+print get_hough_lines(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'hough_test',
+                                   'Test_Set_1', 'PNGs', 'C(C)C(CCCC)(C)C.png'))
