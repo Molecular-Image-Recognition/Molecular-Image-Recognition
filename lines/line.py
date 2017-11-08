@@ -59,7 +59,6 @@ class LineSegment:
         dists += [L.getShortestDistToPoint(pt) for pt in self.pts]
         dists += [L.pts[0].getDistance(pt) for pt in self.pts]
         dists += [L.pts[1].getDistance(pt) for pt in self.pts]
-        print dists
         return min(dists)
     
     def getDifference(self,L):
@@ -146,7 +145,7 @@ def combineLines(lines):
         else:
             pt2 = Point((ymin-b)/m,ymin)
     
-    return Line([pt1,pt2])
+    return LineSegment([pt1,pt2])
 
 def combinePoints(lines,atol):
     """
