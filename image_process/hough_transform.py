@@ -2,6 +2,7 @@ import numpy as np
 from skimage.transform import hough_line, hough_line_peaks, probabilistic_hough_line
 from skimage.feature import canny
 from skimage.io import imread
+from lines.line import Point, LineSegment
 import matplotlib.pyplot as plt
 
 
@@ -55,7 +56,17 @@ def hough_transform_plots(image_path, use_probabilistic=True, use_canny=True):
 
 def get_hough_lines(image_path, use_canny=True):
     edges = _load_image(image_path, use_canny)
-    return probabilistic_hough_line(edges)
+    lines = probabilistic_hough_line(edges)
+
+    line_segment_list = []
+
+    for line_seg in lines:
+        point_1 = Point(*line_seg[0])
+        point_2 = Point(*line_seg[1])
+        new_line = LineSegment([point_1, point_2])
+        line_segment_list.append(new_line)
+
+    return line_segment_list
 
 
 def _load_image(image_path, use_canny):
