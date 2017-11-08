@@ -13,24 +13,32 @@ class Point:
         return np.sqrt((self.x-pt.x)**2+(self.y-pt.y)**2)
 
 class LineSegment:
-    def __init__(self,pts):
+    def __init__(self,pts,order=1):
         self.pts = pts
         self.m = (pts[1].y-pts[0].y)/(pts[1].x-pts[0].x)
         self.b = self.pts[0].y-self.m*self.pts[0].x
-        self.theta = np.arctan(self.m)*(180.0/np.pi)
+        self.theta = np.arctan(self.m)
         xs = [pt.x for pt in pts]
         #ys = [pt.y for pt in pts]
         self.xmin = min(xs)
         self.xmax = max(xs)
         #self.ymin = min(ys)
         #self.ymax = max(ys)
-    
+        self.length = pts[0].getDistance(pts[1])
+        self.order = order #bond order
+        
     def pointIn(self,pt):
+        """
+        is pt within the line segement
+        """
         boo1 = pt.y-self.m*pt.x-self.b < 1e-8
         boo2 = pt.x >= self.xmin and pt.x <= self.xmax
         return boo1 and boo2
     
     def getShortestDistToPoint(self,pt):
+        """
+        The shortest distance between the point pt and the overall line (not segemented)
+        """
         mp = -1.0/self.m
         bp = pt.y-mp*pt.x
         xstar = (bp-self.b)/(self.m-mp)
@@ -44,16 +52,26 @@ class LineSegment:
             return np.inf
     
     def getMinimumDist(self,L):
+        """
+        find the minimum distance between two line segements
+        """
         dists = [self.getShortestDistToPoint(pt) for pt in L.pts]
         dists += [L.getShortestDistToPoint(pt) for pt in self.pts]
         dists += [L.pts[0].getDistance(pt) for pt in self.pts]
         dists += [L.pts[1].getDistance(pt) for pt in self.pts]
+        print dists
         return min(dists)
     
     def getDifference(self,L):
+        """
+        find important difference information between two lines
+        """
         return [self.getMinimumDist(L),abs(self.theta-L.theta)]
     
     def getIntersection(self,L):
+        """
+        find the point at which two lines intersect
+        """
         if self.m == L.m:
             return None
         else:
@@ -61,15 +79,21 @@ class LineSegment:
             y = self.m*x+self.b
             return Point(x,y)
     
-    def breakAtIntersection(self,L):
+    def breakAtItersection(self,L):
+        """
+        break the two lines at their itersection into four lines
+        """
         pt = self.getIntersection(L)
         if pt and self.pointIn(pt):
             lines = [LineSegment(self.pts[0],pt),LineSegment(self.pts[1],pt),LineSegment(L.pts[1],pt),LineSegment(L.pts[1],pt)]
             return lines
         else:
             return [self]
-        
-    def extendToIntersection(self,L):
+    
+    def extendToItersection(self,L):
+        """
+        extend two lines to the point at which they intersect
+        """
         pt = self.getItersection(L)
         if pt:
             dist = [pt.getDistance(lpt) for lpt in self.pts]
@@ -81,6 +105,9 @@ class LineSegment:
             return [self,L]
         
 def combineLines(lines):
+    """
+    combine the set of LineSegments in lines into one line segment
+    """
     xs = []
     ys = []
     for line in lines:
@@ -119,5 +146,30 @@ def combineLines(lines):
         else:
             pt2 = Point((ymin-b)/m,ymin)
     
-    return LineSegment([pt1,pt2])
+    return Line([pt1,pt2])
 
+def combinePoints(lines,atol):
+    """
+    adjusts the points so lines close to itersecting intersect
+    """
+    pts = []
+    lineList = []
+    for line in lines:
+        pts += lines.pts
+        lineList.append(line)
+    
+    for i,pt1 in enumerate(pts):
+        for j,pt2 in enumerate(pts):
+            if i != j:
+                dist = pt1.getDistance(pt2)
+                if dist < atol:
+                    ind = i // 2
+                    ptind = i % 2
+                    line = lineList[ind]
+                    if ptind == 0:
+                        newLine = LineSegment([pt2,line.pts[1]])
+                    else:
+                        newLine = LineSegment([pt2,line.pts[0]])
+                    lineList[i] = newLine
+    
+    return lineList
