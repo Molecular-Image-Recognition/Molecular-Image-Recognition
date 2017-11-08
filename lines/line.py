@@ -147,28 +147,53 @@ def combineLines(lines):
     
     return LineSegment([pt1,pt2])
 
-def combinePoints(lines,atol):
+def __combinePoints(lines,atol):
     """
     adjusts the points so lines close to itersecting intersect
     """
     pts = []
-    lineList = []
     for line in lines:
         pts += lines.pts
-        lineList.append(line)
     
     for i,pt1 in enumerate(pts):
         for j,pt2 in enumerate(pts):
             if i != j:
                 dist = pt1.getDistance(pt2)
-                if dist < atol:
+                if dist < atol and pt1 != pt2:
                     ind = i // 2
                     ptind = i % 2
-                    line = lineList[ind]
+                    line = lines[ind]
                     if ptind == 0:
                         newLine = LineSegment([pt2,line.pts[1]])
                     else:
                         newLine = LineSegment([pt2,line.pts[0]])
-                    lineList[i] = newLine
+                    lines[i] = newLine
     
-    return lineList
+    return lines
+
+def getAdjMatrix(lines,atol):
+    """
+    converts a set of lines with point objects that have been made identical if close
+    into an adjacency matrix, atol is the point closeness tolerance
+    """
+    
+    lines = __combinePoints(lines,atol)
+    
+    pts = []
+    for line in lines:
+        pts += lines.pts
+    
+    adjMat = np.zeros((len(pts),len(pts)))
+    
+    for i,pt in enumerate(pts):
+        for line in lines:
+            if line.pts[0] == pt:
+                adjMat[i,pts.index(line.pts[0])] = line.order
+                adjMat[pts.index(line.pts[0]),i] = line.order
+            elif line.pts[1] == pt:
+                adjMat[i,pts.index(line.pts[1])] = line.order
+                adjMat[pts.index(line.pts[1]),i] = line.order
+    
+    return adjMat
+
+    
