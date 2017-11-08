@@ -145,7 +145,7 @@ def combineLines(lines):
         else:
             pt2 = Point((ymin-b)/m,ymin)
     
-    return Line([pt1,pt2])
+    return LineSegment([pt1,pt2])
 
 def combinePoints(lines,atol):
     """
