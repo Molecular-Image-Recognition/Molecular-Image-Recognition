@@ -77,3 +77,8 @@ def _load_image(image_path, use_canny):
     else:
         edges = image
     return edges
+
+
+def get_image_size(image_path):
+    image = imread(image_path, as_grey=True)
+    return image.shape
