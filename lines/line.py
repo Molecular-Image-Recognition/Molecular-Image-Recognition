@@ -15,7 +15,10 @@ class Point:
 class LineSegment:
     def __init__(self,pts,order=1):
         self.pts = pts
-        self.m = (pts[1].y-pts[0].y)/(pts[1].x-pts[0].x)
+        if abs(pts[1].x-pts[0].x) > 1e-15:
+            self.m = (pts[1].y-pts[0].y)/(pts[1].x-pts[0].x)
+        else:
+            self.m = np.inf
         self.b = self.pts[0].y-self.m*self.pts[0].x
         self.theta = np.arctan(self.m)
         xs = [pt.x for pt in pts]

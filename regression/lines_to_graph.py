@@ -19,29 +19,36 @@ def lines_to_graph(lines, params):
     max_angle_bond = params[5]
     node_radius = params[6]
     
+    i=0
 	# merge lines
     while i < len(lines) - 1:
         j = i + 1
-    	while j < len(lines):
+        while j < len(lines):
+            print(i)
+            print(j)
             didmerge = False
 
             line1 = lines[i]
             line2 = lines[j]
-
+            
             dist, angle = line1.getDifference(line2)
             if dist < min_dist_merge and angle < min_angle_merge:
                 merged = combineLines([line1, line2])
                 lines[i] = merged
-                lines[j] = []
+                del lines[j]
                 didmerge = True
 
             if not didmerge:
                 j += 1
-    
+        i = i + 1
+    return lines
+    i=0
     # deal with intersections
     while i < len(lines) - 1:
         j = i + 1
         while j < len(lines):
+            print(i)
+            print(j)
             didbreak = False
             line1 = lines[i]
             line2 = lines[j]
@@ -69,4 +76,5 @@ def lines_to_graph(lines, params):
                 j += 1
 
 	# join bonds together and return the adjacency matrix generated
-    return getAdjMatrix(lines, node_radius)
+        
+    return lines
