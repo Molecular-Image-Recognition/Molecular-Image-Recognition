@@ -78,16 +78,17 @@ class LineSegment:
             y = self.m*x+self.b
             return Point(x,y)
     
-    def breakAtItersection(self,L):
+    def breakAtIntersection(self,L):
         """
         break the two lines at their itersection into four lines
         """
         pt = self.getIntersection(L)
-        if pt and self.pointIn(pt):
+        notok = (self.pts[0].x == pt.x and self.pts[0].y == pt.y) or (self.pts[1].x == pt.x and self.pts[1].y == pt.y)
+        if pt and not notok and self.pointIn(pt):
             lines = [LineSegment(self.pts[0],pt),LineSegment(self.pts[1],pt),LineSegment(L.pts[1],pt),LineSegment(L.pts[1],pt)]
             return lines
         else:
-            return [self]
+            return [self,L]
     
     def extendToItersection(self,L):
         """
