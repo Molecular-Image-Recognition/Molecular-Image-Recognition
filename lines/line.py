@@ -126,28 +126,43 @@ def combineLines(lines):
     xmin = min(xs)
     ymax = max(ys)
     ymin = min(ys)
-    if m >= 0:
-        xmaxy = m*xmax+b
-        if xmaxy > ymax:
-            pt1 = Point(xmax,xmaxy)
-        else:
-            pt1 = Point((ymax-b)/m,ymax)
-        xminy = m*xmin+b
-        if xminy < ymin:
-            pt2 = Point(xmin,xminy)
-        else:
-            pt2 = Point((ymin-b)/m,ymin)
+#    if m >= 0:
+#        xmaxy = m*xmax+b
+#        if xmaxy > ymax:
+#            pt1 = Point(xmax,xmaxy)
+#        else:
+#            pt1 = Point((ymax-b)/m,ymax)
+#        xminy = m*xmin+b
+#        if xminy < ymin:
+#            pt2 = Point(xmin,xminy)
+#        else:
+#            pt2 = Point((ymin-b)/m,ymin)
+#    else:
+#        xminy = m*xmin+b
+#        if xminy > ymax:
+#            pt1 = Point(xmin,xminy)
+#        else:
+#            pt1 = Point((ymax-b)/m,ymax)
+#        xmaxy = m*xmax+b
+#        if xmaxy < ymin:
+#            pt2 = Point(xmax,xmaxy)
+#        else:
+#            pt2 = Point((ymin-b)/m,ymin)
+    
+    f = lambda x: m*x + b
+    finv = lambda y: (y-b)/m
+    
+    if ymin < f(xmin) < ymax:
+        pt1 = Point(xmin, f(xmin))
     else:
-        xminy = m*xmin+b
-        if xminy > ymax:
-            pt1 = Point(xmin,xminy)
-        else:
-            pt1 = Point((ymax-b)/m,ymax)
-        xmaxy = m*xmax+b
-        if xmaxy < ymin:
-            pt2 = Point(xmax,xmaxy)
-        else:
-            pt2 = Point((ymin-b)/m,ymin)
+        yp = ymin if m > 0 else ymax
+        pt1 = Point(finv(yp), yp)
+        
+    if ymin < f(xmax) < ymax:
+        pt2 = Point(xmax, f(xmax))
+    else:
+        yp = ymax if m > 0 else ymin
+        pt2 = Point(finv(yp), yp)
     
     return LineSegment([pt1,pt2])
 
