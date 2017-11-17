@@ -15,6 +15,9 @@ from image_processing import get_hough_lines
 from lines_to_graph import lines_to_graph
 
 def getLoss(files,params):
+    """
+    calculates the loss for images in files and the set of parameters params
+    """
     loss = 0.0
     for fname in files:
         if test(fname,params):
@@ -24,9 +27,14 @@ def getLoss(files,params):
     return loss
 
 def test(fname,params):
-    bname = os.path.basename(os.path.normpath(fname))
+    """
+    checks if the given parameters allow proper identification of the image in fname
+    assumes fname is of the form '/any/any/any/smilesString.any'
+    for example /stuff/CC[O].thing 
+    """
+    bname = os.path.basename(os.path.normpath(fname)) #get rid of all but the final name
     smiles = bname.split('.')[0]
-    m = Molecule().fromSMILES(smiles)
+    m = Molecule().fromSMILES(smiles) #make actual molecule
     
     lines = get_hough_lines(fname)
     imdim = max([x.length for x in lines])
