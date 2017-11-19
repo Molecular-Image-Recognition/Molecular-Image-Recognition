@@ -40,14 +40,11 @@ def lines_to_graph(lines, params):
             if not didmerge:
                 j += 1
         i = i + 1
-    return lines
     i=0
     # deal with intersections
     while i < len(lines) - 1:
         j = i + 1
         while j < len(lines):
-            print(i)
-            print(j)
             didbreak = False
             line1 = lines[i]
             line2 = lines[j]
