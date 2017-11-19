@@ -157,45 +157,71 @@ def combineLines(lines):
 #        else:
 #            pt2 = Point((ymin-b)/m,ymin)
     
-    f = lambda x: m*x + b
-    finv = lambda y: (y-b)/m
-    
-    if ymin < f(xmin) < ymax:
-        pt1 = Point(xmin, f(xmin))
-    else:
-        yp = ymin if m > 0 else ymax
-        pt1 = Point(finv(yp), yp)
-        
-    if ymin < f(xmax) < ymax:
-        pt2 = Point(xmax, f(xmax))
-    else:
-        yp = ymax if m > 0 else ymin
-        pt2 = Point(finv(yp), yp)
-    
-    return LineSegment([pt1,pt2])
+#    f = lambda x: m*x + b
+#    finv = lambda y: (y-b)/m
+#    
+#    if ymin < f(xmin) < ymax:
+#        pt1 = Point(xmin, f(xmin))
+#    else:
+#        yp = ymin if m > 0 else ymax
+#        pt1 = Point(finv(yp), yp)
+#        
+#    if ymin < f(xmax) < ymax:
+#        pt2 = Point(xmax, f(xmax))
+#    else:
+#        yp = ymax if m > 0 else ymin
+#        pt2 = Point(finv(yp), yp)
+    s = 0.0
+    pts = []
+    for line in lines:
+        pts += line.pts
+    for pt1 in pts:
+        for pt2 in pts:
+            val = pt1.getDistance(pt2)
+            if val > s:
+                outpts =[pt1,pt2]
+                s = val
+    return LineSegment(outpts)
 
-def __combinePoints(lines,atol):
+def combinePoints(lines,atol):
     """
     adjusts the points so lines close to itersecting intersect
     """
     pts = []
     for line in lines:
-        pts += lines.pts
+        pts += line.pts
     
+    identicals = []
     for i,pt1 in enumerate(pts):
         for j,pt2 in enumerate(pts):
             if i != j:
                 dist = pt1.getDistance(pt2)
                 if dist < atol and pt1 != pt2:
-                    ind = i // 2
-                    ptind = i % 2
-                    line = lines[ind]
-                    if ptind == 0:
-                        newLine = LineSegment([pt2,line.pts[1]])
-                    else:
-                        newLine = LineSegment([pt2,line.pts[0]])
-                    lines[i] = newLine
+                    identicals.append({i,j})
+                    
+    for i,s in enumerate(identicals):
+        for j,s2 in enumerate(identicals):
+            if s & s2 != set():
+                identicals[i] = identicals[i] | s2
+                identicals[j] = identicals[j] | s
     
+    identicals = [tuple(item) for item in identicals]
+    identicals = list(set(identicals))
+    
+    for s in identicals:
+        pt = pts[s[0]]
+        for i in xrange(1,len(s)):
+            pts[s[i]] = pt
+    
+    lines = [LineSegment([pt,pts[i+1]]) for i,pt in enumerate(pts) if i%2 == 0]
+    delinds = [] #delete lines for which points are identical
+    for i,line in enumerate(lines):
+        if line.pts[0] == line.pts[1]:
+            delinds.append(i)
+    
+    for i in reversed(delinds):
+        del lines[i]
+        
     return lines
 
 def getAdjMatrix(lines,atol):
@@ -222,5 +248,17 @@ def getAdjMatrix(lines,atol):
                 adjMat[pts.index(line.pts[1]),i] = line.order
     
     return adjMat
+
+def getArea(pts):
+    """
+    area calculated from verticies of 2-D shape based on the shoelace formula
+    """
+    N = len(pts)
+    s1 = pts[N-1].x*pts[0].y
+    s2 = pts[0].x*pts[N-1].y
+    s1 += sum([pts[i].x*pts[i+1].y for i in xrange(0,N-1)])
+    s2 += sum([pts[i+1].x*pts[i].y for i in xrange(0,N-1)])
+    
+    return .5*abs(s1-s2)
 
     
