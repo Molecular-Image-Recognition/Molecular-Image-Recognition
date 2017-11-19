@@ -64,11 +64,19 @@ class LineSegment:
         dists += [L.pts[1].getDistance(pt) for pt in self.pts]
         return min(dists)
     
+    def getArea(self,L):
+        pts = self.pts+L.pts
+        return getArea(pts)
+    
+
     def getDifference(self,L):
         """
         find important difference information between two lines
         """
-        return [self.getMinimumDist(L),abs(self.theta-L.theta)]
+        A = self.getArea(L)
+        length = combineLines([self,L]).length
+        width = A/length
+        return [self.getMinimumDist(L),abs(self.theta-L.theta),width]
     
     def getIntersection(self,L):
         """
