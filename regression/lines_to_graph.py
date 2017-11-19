@@ -13,26 +13,25 @@ def lines_to_graph(lines, params):
     # define paramters
     min_dist_merge = params[0]
     min_angle_merge = params[1]
-    split_tol = params[2]
-    min_dist_bond = params[3]
-    max_dist_bond = params[4]
-    max_angle_bond = params[5]
-    node_radius = params[6]
+    min_width_merge = params[2]
+    split_tol = params[3]
+    min_dist_bond = params[4]
+    max_dist_bond = params[5]
+    max_angle_bond = params[6]
+    node_radius = params[7]
     
     i=0
 	# merge lines
     while i < len(lines) - 1:
         j = i + 1
         while j < len(lines):
-            print(i)
-            print(j)
             didmerge = False
 
             line1 = lines[i]
             line2 = lines[j]
             
-            dist, angle = line1.getDifference(line2)
-            if dist < min_dist_merge and angle < min_angle_merge:
+            dist, angle, width = line1.getDifference(line2)
+            if dist < min_dist_merge and angle < min_angle_merge and width < min_width_merge:
                 merged = combineLines([line1, line2])
                 lines[i] = merged
                 del lines[j]

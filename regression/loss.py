@@ -11,8 +11,8 @@ os.chdir('..')
 from rmgpy.molecule.molecule import Molecule
 from molecule.adjacency import Adjacency
 from lines.line import getAdjMatrix, LineSegment
-from image_processing import get_hough_lines
-from lines_to_graph import lines_to_graph
+from image_process.hough_transform import get_hough_lines
+from regression.lines_to_graph import lines_to_graph
 
 def getLoss(files,params):
     """
@@ -51,7 +51,7 @@ def test(fname,params):
     
     lines = lines_to_graph(lines, params)
     
-    node_radius = params[6]
+    node_radius = params[7]
     
     adj = getAdjMatrix(lines,node_radius)
     atomnames = ['C']*adj.shape[0]
