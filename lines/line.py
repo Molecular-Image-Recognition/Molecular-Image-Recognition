@@ -248,16 +248,20 @@ def getAdjMatrix(lines):
     for line in lines:
         pts += line.pts
     
+    pts = [(p,) for p in pts]
+    pts = set(pts)
+    pts = [p[0] for p in pts]
+    
     adjMat = np.zeros((len(pts),len(pts)))
     
     for i,pt in enumerate(pts):
         for line in lines:
             if line.pts[0] == pt:
-                adjMat[i,pts.index(line.pts[0])] = line.order
-                adjMat[pts.index(line.pts[0]),i] = line.order
-            elif line.pts[1] == pt:
                 adjMat[i,pts.index(line.pts[1])] = line.order
                 adjMat[pts.index(line.pts[1]),i] = line.order
+            elif line.pts[1] == pt:
+                adjMat[i,pts.index(line.pts[0])] = line.order
+                adjMat[pts.index(line.pts[0]),i] = line.order
     
     return adjMat
 
