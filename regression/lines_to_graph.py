@@ -22,7 +22,7 @@ def lines_to_graph(lines, params):
     
     i=0
 	# merge lines
-    while i < len(lines) - 1:
+    while i < len(lines):
         j = i + 1
         while j < len(lines):
             didmerge = False
@@ -37,10 +37,13 @@ def lines_to_graph(lines, params):
                 del lines[j]
                 didmerge = True
 
-            if not didmerge:
+            if didmerge:
+                i = -1
+                break
+            else:
                 j += 1
-        i = i + 1
-    i=0
+        i += 1
+        
     # deal with intersections
     while i < len(lines) - 1:
         j = i + 1
