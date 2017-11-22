@@ -238,17 +238,15 @@ def combinePoints(lines,atol):
         
     return lines
 
-def getAdjMatrix(lines,atol):
+def getAdjMatrix(lines):
     """
     converts a set of lines with point objects that have been made identical if close
     into an adjacency matrix, atol is the point closeness tolerance
     """
     
-    lines = __combinePoints(lines,atol)
-    
     pts = []
     for line in lines:
-        pts += lines.pts
+        pts += line.pts
     
     adjMat = np.zeros((len(pts),len(pts)))
     
