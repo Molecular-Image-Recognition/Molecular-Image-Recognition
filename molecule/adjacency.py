@@ -32,10 +32,11 @@ class Adjacency:
                 presentbds = bondNum
             bds = Adjacency.atomDict[name]
             bdif = bds-presentbds
+            bdif = int(bdif)
             assert bdif >= 0, 'some atom has more bonds than it should'
             if bdif != 0:
                 for k in xrange(bdif):
-                    n = self.adjMatrix.shape[0]
+                    n = adjMatrix.shape[0]
                     adjMatrix = np.concatenate((adjMatrix.T,np.zeros((1,n)))).T
                     adjMatrix = np.concatenate((adjMatrix,np.zeros((1,n+1))))
                     adjMatrix[n,i] = 1
@@ -69,7 +70,9 @@ class Adjacency:
             if self.lonepairs:
                 newstr += 'p'+str(int(self.lonepairs[i]))+' '
             elif name != 'H':
-                es = 8-2*sum(self.adjMatrix[i,:])-self.unpaireds[i]
+                es = 8-2*sum(self.adjMatrix[i,:])
+                if self.unpaireds:
+                    es = es - self.unpaireds[i]
                 lp = es // 2
                 newstr += 'p'+str(int(lp))+' '
             elif name == 'H':
