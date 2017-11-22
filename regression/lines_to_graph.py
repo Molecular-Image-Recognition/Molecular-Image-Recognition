@@ -75,6 +75,33 @@ def lines_to_graph(lines, params):
                 j += 1
         
         i += 1
+        
+    # deal with high order bonds
+    i = 0
+    while i < len(lines) - 1:
+        j = i + 1
+        while j < len(lines):
+            
+            line1 = lines[i]
+            line2 = lines[j]
+            
+            dist, angle, width = line1.getDifference(line2)
+            
+            if min_dist_bond < dist and dist < max_dist_bond and angle < max_angle_bond:
+                # remove the shorter of the lines and increment order
+                if line1.length < line2.length:
+                    lines[j].order += 1
+                    del lines[i]
+                else:
+                    lines[i].order += 1
+                    del lines[j]
+                    
+                i = -1
+                break
+            else:
+                j += 1
+        i += 1
+                    
 
 	# join bonds together and return the adjacency matrix generated
         
