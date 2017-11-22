@@ -45,17 +45,15 @@ def lines_to_graph(lines, params):
         i += 1
         
     # deal with intersections
+    i = 0
     while i < len(lines) - 1:
         j = i + 1
         while j < len(lines):
-            didbreak = False
             line1 = lines[i]
             line2 = lines[j]
-
             broken = line1.breakAtIntersection(line2)
-
+            
             if len(broken) != 2:
-                didbreak = True
                 brokenlengths = [a.length for a in broken]
                 brokenlengths[0] /= line1.length
                 brokenlengths[1] /= line1.length
@@ -65,14 +63,18 @@ def lines_to_graph(lines, params):
                 for k in [3,2,1,0]:
                     if brokenlengths[k] < split_tol:
                         del broken[k]
-
-            if didbreak:
+                
                 lines[i] = broken[0]
-                lines[j] = broken[1:]
+                lines[j] = broken[1]
+                for k in reversed(range(2,len(broken))):
+                    lines.insert(j+1, broken[k])
 
                 j += len(broken) - 1
+                print len(lines)
             else:      
                 j += 1
+        
+        i += 1
 
 	# join bonds together and return the adjacency matrix generated
         
