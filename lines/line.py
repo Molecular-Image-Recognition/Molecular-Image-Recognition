@@ -76,7 +76,9 @@ class LineSegment:
         A = self.getArea(L)
         length = combineLines([self,L]).length
         width = A/length
-        return [self.getMinimumDist(L),abs(self.theta-L.theta),width]
+        thta = abs(self.theta-L.theta)
+        thta = min(thta,np.pi-thta)
+        return [self.getMinimumDist(L),thta,width]
     
     def getIntersection(self,L):
         """
