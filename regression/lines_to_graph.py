@@ -104,5 +104,6 @@ def lines_to_graph(lines, params):
                     
 
 	# join bonds together and return the adjacency matrix generated
+    lines = combinePoints(lines, node_radius)
         
     return lines
