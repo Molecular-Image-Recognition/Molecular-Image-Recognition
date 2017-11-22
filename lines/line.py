@@ -196,6 +196,7 @@ def combinePoints(lines,atol):
     """
     adjusts the points so lines close to itersecting intersect
     """
+    orders = [x.order for x in lines]
     pts = []
     for line in lines:
         pts += line.pts
@@ -223,6 +224,10 @@ def combinePoints(lines,atol):
             pts[s[i]] = pt
     
     lines = [LineSegment([pt,pts[i+1]]) for i,pt in enumerate(pts) if i%2 == 0]
+    
+    for i in xrange(len(lines)):
+        lines[i].order = orders[i]
+        
     delinds = [] #delete lines for which points are identical
     for i,line in enumerate(lines):
         if line.pts[0] == line.pts[1]:
