@@ -34,7 +34,7 @@ class LineSegment:
         """
         is pt within the line segement
         """
-        boo1 = pt.y-self.m*pt.x-self.b < 1e-8
+        boo1 = pt.y-self.m*pt.x-self.b < 1e-4
         boo2 = pt.x >= self.xmin and pt.x <= self.xmax
         return boo1 and boo2
     
