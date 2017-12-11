@@ -1,0 +1,479 @@
+units(length='cm', time='s', quantity='mol', act_energy='kcal/mol')
+
+ideal_gas(name='gas',
+          elements="H C O N Ne Ar He Si S Cl",
+          species="""Ar         He         Ne         N2         ethane(1)
+                     CH3(2)     C2H5(3)    H(4)       C(6)       C2H4(8)
+                     H2(12)     C2H3(13)   C3H7(14)   C#C(25)    C4H7(28)
+                     C4H6(30)   C3H5(32)   C4H7(38)   C4H7(42)""",
+          reactions='all',
+          initial_state=state(temperature=300.0, pressure=OneAtm))
+
+#-------------------------------------------------------------------------------
+# Species data
+#-------------------------------------------------------------------------------
+
+species(name=u'Ar',
+        atoms='Ar:1',
+        thermo=(NASA([200.00, 1000.00],
+                     [ 2.50000000E+00,  0.00000000E+00,  0.00000000E+00,
+                       0.00000000E+00,  0.00000000E+00, -7.45375000E+02,
+                       4.37967000E+00]),
+                NASA([1000.00, 6000.00],
+                     [ 2.50000000E+00,  0.00000000E+00,  0.00000000E+00,
+                       0.00000000E+00,  0.00000000E+00, -7.45375000E+02,
+                       4.37967000E+00])))
+
+species(name=u'He',
+        atoms='He:1',
+        thermo=(NASA([200.00, 1000.00],
+                     [ 2.50000000E+00,  0.00000000E+00,  0.00000000E+00,
+                       0.00000000E+00,  0.00000000E+00, -7.45375000E+02,
+                       9.28724000E-01]),
+                NASA([1000.00, 6000.00],
+                     [ 2.50000000E+00,  0.00000000E+00,  0.00000000E+00,
+                       0.00000000E+00,  0.00000000E+00, -7.45375000E+02,
+                       9.28724000E-01])))
+
+species(name=u'Ne',
+        atoms='Ne:1',
+        thermo=(NASA([200.00, 1000.00],
+                     [ 2.50000000E+00,  0.00000000E+00,  0.00000000E+00,
+                       0.00000000E+00,  0.00000000E+00, -7.45375000E+02,
+                       3.35532000E+00]),
+                NASA([1000.00, 6000.00],
+                     [ 2.50000000E+00,  0.00000000E+00,  0.00000000E+00,
+                       0.00000000E+00,  0.00000000E+00, -7.45375000E+02,
+                       3.35532000E+00])))
+
+species(name=u'N2',
+        atoms='N:2',
+        thermo=(NASA([200.00, 1000.00],
+                     [ 3.53101000E+00, -1.23661000E-04, -5.02999000E-07,
+                       2.43531000E-09, -1.40881000E-12, -1.04698000E+03,
+                       2.96747000E+00]),
+                NASA([1000.00, 6000.00],
+                     [ 2.95258000E+00,  1.39690000E-03, -4.92632000E-07,
+                       7.86010000E-11, -4.60755000E-15, -9.23949000E+02,
+                       5.87189000E+00])))
+
+species(name=u'ethane(1)',
+        atoms='H:6 C:2',
+        thermo=(NASA([100.00, 954.53],
+                     [ 3.78029291E+00, -3.24211430E-03,  5.52361704E-05,
+                      -6.38555558E-08,  2.28625654E-11, -1.16203391E+04,
+                       5.21048530E+00]),
+                NASA([954.53, 5000.00],
+                     [ 4.58997390E+00,  1.41505285E-02, -4.75947845E-06,
+                       8.60260221E-10, -6.21688243E-14, -1.27218243E+04,
+                      -3.61819191E+00])))
+
+species(name=u'CH3(2)',
+        atoms='H:3 C:1',
+        thermo=(NASA([100.00, 1337.63],
+                     [ 3.91546733E+00,  1.84154615E-03,  3.48740903E-06,
+                      -3.32746709E-09,  8.49953855E-13,  1.62856394E+04,
+                       3.51742525E-01]),
+                NASA([1337.63, 5000.00],
+                     [ 3.54146159E+00,  4.76786209E-03, -1.82148094E-06,
+                       3.28875850E-10, -2.22545011E-14,  1.62239559E+04,
+                       1.66032608E+00])))
+
+species(name=u'C2H5(3)',
+        atoms='H:5 C:2',
+        thermo=(NASA([100.00, 900.30],
+                     [ 3.82186929E+00, -3.43402417E-03,  5.09273273E-05,
+                      -6.20234340E-08,  2.37083980E-11,  1.30660115E+04,
+                       7.61631583E+00]),
+                NASA([900.30, 5000.00],
+                     [ 5.15612067E+00,  9.43138060E-03, -1.81955154E-06,
+                       2.21217788E-10, -1.43499804E-14,  1.20641180E+04,
+                      -2.91049373E+00])))
+
+species(name=u'H(4)',
+        atoms='H:1',
+        thermo=(NASA([100.00, 4570.96],
+                     [ 2.50000000E+00,  1.77470207E-12, -2.27500193E-15,
+                       9.48631670E-19, -1.21629755E-22,  2.54742178E+04,
+                      -4.44972895E-01]),
+                NASA([4570.96, 5000.00],
+                     [ 2.49829732E+00,  1.45963990E-06, -4.69032548E-10,
+                       6.69551836E-14, -3.58258629E-18,  2.54758061E+04,
+                      -4.34136157E-01])))
+
+species(name=u'C(6)',
+        atoms='H:4 C:1',
+        thermo=(NASA([100.00, 1084.12],
+                     [ 4.20541310E+00, -5.35554899E-03,  2.51122436E-05,
+                      -2.13761821E-08,  5.97519843E-12, -1.01619432E+04,
+                      -9.21271573E-01]),
+                NASA([1084.12, 5000.00],
+                     [ 9.08278050E-01,  1.14540655E-02, -4.57172682E-06,
+                       8.29189010E-10, -5.66312716E-14, -9.71997984E+03,
+                       1.39930246E+01])))
+
+species(name=u'C2H4(8)',
+        atoms='H:4 C:2',
+        thermo=(NASA([100.00, 940.44],
+                     [ 3.97976020E+00, -7.57579352E-03,  5.52980432E-05,
+                      -6.36231570E-08,  2.31771655E-11,  5.07746019E+03,
+                       4.04617155E+00]),
+                NASA([940.44, 5000.00],
+                     [ 5.20294372E+00,  7.82451164E-03, -2.12688492E-06,
+                       3.79702680E-10, -2.94680849E-14,  3.93630185E+03,
+                      -6.62382783E+00])))
+
+species(name=u'H2(12)',
+        atoms='H:2',
+        thermo=(NASA([100.00, 1959.07],
+                     [ 3.43536403E+00,  2.12711102E-04, -2.78626742E-07,
+                       3.40268499E-10, -7.76035298E-14, -1.03135984E+03,
+                      -3.90841699E+00]),
+                NASA([1959.07, 5000.00],
+                     [ 2.78817485E+00,  5.87629226E-04,  1.59015901E-07,
+                      -5.52750034E-11,  4.34319008E-15, -5.96149590E+02,
+                       1.12679202E-01])))
+
+species(name=u'C2H3(13)',
+        atoms='H:3 C:2',
+        thermo=(NASA([100.00, 931.97],
+                     [ 3.90669557E+00, -4.06228810E-03,  3.86775481E-05,
+                      -4.62970100E-08,  1.72897519E-11,  3.47971787E+04,
+                       6.09792480E+00]),
+                NASA([931.97, 5000.00],
+                     [ 5.44799578E+00,  4.98350870E-03, -1.08817688E-06,
+                       1.79829928E-10, -1.45090109E-14,  3.38297623E+04,
+                      -4.87825197E+00])))
+
+species(name=u'C3H7(14)',
+        atoms='H:7 C:3',
+        thermo=(NASA([100.00, 995.41],
+                     [ 3.09191508E+00,  1.32172227E-02,  2.75848448E-05,
+                      -3.90849999E-08,  1.43313800E-11,  1.02284117E+04,
+                       1.24057799E+01]),
+                NASA([995.41, 5000.00],
+                     [ 5.69430152E+00,  1.96033543E-02, -7.42050458E-06,
+                       1.35883147E-09, -9.56216475E-14,  8.87585173E+03,
+                      -4.32885235E+00])))
+
+species(name=u'C#C(25)',
+        atoms='H:2 C:2',
+        thermo=(NASA([100.00, 888.64],
+                     [ 3.03573436E+00,  7.71255481E-03,  2.53429827E-06,
+                      -1.08124066E-08,  5.50714193E-12,  2.58526449E+04,
+                       4.54465886E+00]),
+                NASA([888.64, 5000.00],
+                     [ 5.76207781E+00,  2.37152998E-03, -1.49548398E-07,
+                      -2.19237341E-11,  2.21848824E-15,  2.50944370E+04,
+                      -9.82626759E+00])))
+
+species(name=u'C4H7(28)',
+        atoms='H:7 C:4',
+        thermo=(NASA([100.00, 1000.95],
+                     [ 2.68061422E+00,  2.10825717E-02,  2.02123278E-05,
+                      -3.64243621E-08,  1.41445056E-11,  2.27528011E+04,
+                       1.66008558E+01]),
+                NASA([1000.95, 5000.00],
+                     [ 7.59471914E+00,  2.06425956E-02, -7.89790375E-06,
+                       1.45966122E-09, -1.03414888E-13,  2.08073397E+04,
+                      -1.19155141E+01])))
+
+species(name=u'C4H6(30)',
+        atoms='H:6 C:4',
+        thermo=(NASA([100.00, 940.94],
+                     [ 2.68208510E+00,  1.69318777E-02,  3.73663437E-05,
+                      -6.26500507E-08,  2.59155776E-11,  1.13546004E+04,
+                       1.20323036E+01]),
+                NASA([940.94, 5000.00],
+                     [ 1.10822419E+01,  1.17737116E-02, -3.11425072E-06,
+                       5.37771117E-10, -4.10644270E-14,  8.42132232E+03,
+                      -3.51690176E+01])))
+
+species(name=u'C3H5(32)',
+        atoms='H:5 C:3',
+        thermo=(NASA([100.00, 997.88],
+                     [ 3.23407992E+00,  1.18208487E-02,  1.70305145E-05,
+                      -2.64365643E-08,  9.91215619E-12,  3.04873066E+04,
+                       1.03182841E+01]),
+                NASA([997.88, 5000.00],
+                     [ 5.66471792E+00,  1.44325983E-02, -5.46737286E-06,
+                       1.00157739E-09, -7.04858445E-14,  2.93870825E+04,
+                      -4.48516098E+00])))
+
+species(name=u'C4H7(38)',
+        atoms='H:7 C:4',
+        thermo=(NASA([100.00, 926.06],
+                     [ 3.04744056E+00,  5.45478227E-03,  7.53343014E-05,
+                      -1.02231435E-07,  4.01850124E-11,  2.58269356E+04,
+                       1.40788412E+01]),
+                NASA([926.06, 5000.00],
+                     [ 1.02344188E+01,  1.41135542E-02, -2.99948260E-06,
+                       4.56675293E-10, -3.49845534E-14,  2.27934407E+04,
+                      -2.92336660E+01])))
+
+species(name=u'C4H7(42)',
+        atoms='H:7 C:4',
+        thermo=(NASA([100.00, 998.56],
+                     [ 2.64213152E+00,  2.15954070E-02,  2.09683526E-05,
+                      -3.79209643E-08,  1.47844796E-11,  1.46809432E+04,
+                       1.34335096E+01]),
+                NASA([998.56, 5000.00],
+                     [ 7.82805776E+00,  2.08400020E-02, -7.96749567E-06,
+                       1.47336693E-09, -1.04524685E-13,  1.26472202E+04,
+                      -1.65754633E+01])))
+
+#-------------------------------------------------------------------------------
+# Reaction data
+#-------------------------------------------------------------------------------
+#  Reaction index: Chemkin #1; RMG #1
+#  Template reaction: R_Recombination
+#  Exact match found for rate rule (C_methyl;C_methyl)
+
+# Reaction 1
+reaction('CH3(2) + CH3(2) <=> ethane(1)', [8.260000e+16, -1.4, 1.0])
+#  Reaction index: Chemkin #2; RMG #4
+#  Template reaction: H_Abstraction
+#  Estimated using template (C/H3/Cs;C_methyl) for rate rule (C/H3/Cs\H3;C_methyl)
+#  Multiplied by reaction path degeneracy 6
+
+# Reaction 2
+reaction('ethane(1) + CH3(2) <=> C2H5(3) + C(6)', [4.488000e-05, 4.99, 8.0])
+#  Reaction index: Chemkin #3; RMG #2
+#  Template reaction: R_Recombination
+#  Exact match found for rate rule (C_rad/H2/Cs;H_rad)
+
+# Reaction 3
+reaction('C2H5(3) + H(4) <=> ethane(1)', [1.000000e+14, 0.0, 0.0])
+#  Reaction index: Chemkin #4; RMG #13
+#  Template reaction: R_Recombination
+#  Exact match found for rate rule (C_methyl;H_rad)
+
+# Reaction 4
+reaction('CH3(2) + H(4) <=> C(6)', [1.930000e+14, 0.0, 0.27])
+#  Reaction index: Chemkin #5; RMG #6
+#  Template reaction: R_Addition_MultipleBond
+#  Exact match found for rate rule (Cds-HH_Cds-HH;HJ)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 5
+reaction('C2H4(8) + H(4) <=> C2H5(3)', [4.620000e+08, 1.64, 1.01])
+#  Reaction index: Chemkin #6; RMG #8
+#  Template reaction: Disproportionation
+#  Exact match found for rate rule (C_methyl;Cmethyl_Csrad)
+#  Multiplied by reaction path degeneracy 3
+
+# Reaction 6
+reaction('CH3(2) + C2H5(3) <=> C2H4(8) + C(6)', [6.570000e+14, -0.68, 0.0])
+#  Reaction index: Chemkin #7; RMG #11
+#  Template reaction: Disproportionation
+#  Exact match found for rate rule (C_rad/H2/Cs;Cmethyl_Csrad)
+#  Multiplied by reaction path degeneracy 3
+
+# Reaction 7
+reaction('C2H5(3) + C2H5(3) <=> ethane(1) + C2H4(8)', [6.900000e+13, -0.35, 0.0])
+#  Reaction index: Chemkin #8; RMG #15
+#  Template reaction: H_Abstraction
+#  Estimated using template (C/H3/Cs;H_rad) for rate rule (C/H3/Cs\H3;H_rad)
+#  Multiplied by reaction path degeneracy 6
+
+# Reaction 8
+reaction('ethane(1) + H(4) <=> H2(12) + C2H5(3)', [6.180000e+03, 3.24, 7.1])
+#  Reaction index: Chemkin #9; RMG #17
+#  Template reaction: Disproportionation
+#  Exact match found for rate rule (H_rad;Cmethyl_Csrad)
+#  Multiplied by reaction path degeneracy 6
+
+# Reaction 9
+reaction('C2H5(3) + H(4) <=> C2H4(8) + H2(12)', [2.166000e+13, 0.0, 0.0])
+#  Reaction index: Chemkin #10; RMG #18
+#  Template reaction: H_Abstraction
+#  Exact match found for rate rule (C_methane;H_rad)
+#  Multiplied by reaction path degeneracy 4
+
+# Reaction 10
+reaction('H(4) + C(6) <=> H2(12) + CH3(2)', [8.760000e-01, 4.34, 8.2])
+#  Reaction index: Chemkin #11; RMG #19
+#  Template reaction: R_Recombination
+#  Exact match found for rate rule (H_rad;H_rad)
+
+# Reaction 11
+reaction('H(4) + H(4) <=> H2(12)', [1.090000e+11, 0.0, 1.5])
+#  Reaction index: Chemkin #12; RMG #23
+#  Template reaction: R_Addition_MultipleBond
+#  Exact match found for rate rule (Cds-HH_Cds-HH;CsJ-HHH)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 12
+reaction('C2H4(8) + CH3(2) <=> C3H7(14)', [4.180000e+04, 2.41, 5.63])
+#  Reaction index: Chemkin #13; RMG #20
+#  Template reaction: R_Recombination
+#  Exact match found for rate rule (Cd_pri_rad;H_rad)
+
+# Reaction 13
+reaction('C2H3(13) + H(4) <=> C2H4(8)', [1.210000e+14, 0.0, 0.0])
+#  Reaction index: Chemkin #14; RMG #24
+#  Template reaction: H_Abstraction
+#  Estimated using template (C_methane;Cd_pri_rad) for rate rule (C_methane;Cd_Cd\H2_pri_rad)
+#  Multiplied by reaction path degeneracy 4
+
+# Reaction 14
+reaction('C2H3(13) + C(6) <=> C2H4(8) + CH3(2)', [2.236000e-02, 4.34, 5.7])
+#  Reaction index: Chemkin #15; RMG #27
+#  Template reaction: H_Abstraction
+#  Estimated using template (C/H3/Cs;Cd_Cd\H2_pri_rad) for rate rule (C/H3/Cs\H3;Cd_Cd\H2_pri_rad)
+#  Multiplied by reaction path degeneracy 6
+
+# Reaction 15
+reaction('ethane(1) + C2H3(13) <=> C2H4(8) + C2H5(3)', [1.080000e-03, 4.55, 3.5])
+#  Reaction index: Chemkin #16; RMG #28
+#  Template reaction: H_Abstraction
+#  Estimated using template (H2;Cd_pri_rad) for rate rule (H2;Cd_Cd\H2_pri_rad)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 16
+reaction('H2(12) + C2H3(13) <=> C2H4(8) + H(4)', [9.460000e+03, 2.56, 5.03])
+#  Reaction index: Chemkin #17; RMG #29
+#  Template reaction: Disproportionation
+#  Exact match found for rate rule (Cd_pri_rad;Cmethyl_Csrad)
+#  Multiplied by reaction path degeneracy 3
+
+# Reaction 17
+reaction('C2H3(13) + C2H5(3) <=> C2H4(8) + C2H4(8)', [4.560000e+14, -0.7, 0.0])
+#  Reaction index: Chemkin #18; RMG #59
+#  Template reaction: R_Addition_MultipleBond
+#  Exact match found for rate rule (Ct-H_Ct-H;HJ)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 18
+reaction('C#C(25) + H(4) <=> C2H3(13)', [1.030000e+09, 1.64, 2.11])
+#  Reaction index: Chemkin #19; RMG #61
+#  Template reaction: Disproportionation
+#  Estimated using template (C_methyl;CH_d_Rrad) for rate rule (C_methyl;Cd_Cdrad)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 19
+reaction('C2H3(13) + CH3(2) <=> C#C(25) + C(6)', [2.277000e+06, 1.87, -1.11])
+#  Reaction index: Chemkin #20; RMG #65
+#  Template reaction: Disproportionation
+#  Estimated using template (Cs_rad;XH_d_Rrad) for rate rule (C_rad/H2/Cs;Cd_Cdrad)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 20
+reaction('C2H3(13) + C2H5(3) <=> ethane(1) + C#C(25)', [1.932000e+06, 1.87, -1.11])
+#  Reaction index: Chemkin #21; RMG #68
+#  Template reaction: Disproportionation
+#  Estimated using template (H_rad;CH_d_Rrad) for rate rule (H_rad;Cd_Cdrad)
+#  Multiplied by reaction path degeneracy 4
+
+# Reaction 21
+reaction('C2H3(13) + H(4) <=> H2(12) + C#C(25)', [1.358000e+09, 1.5, -0.89])
+#  Reaction index: Chemkin #22; RMG #77
+#  Template reaction: Disproportionation
+#  Estimated using template (Y_rad;XH_Rrad) for rate rule (Cd_pri_rad;Cd_Cdrad)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 22
+reaction('C2H3(13) + C2H3(13) <=> C2H4(8) + C#C(25)', [4.670000e+09, 0.969, -3.686])
+#  Reaction index: Chemkin #23; RMG #71
+#  Template reaction: R_Addition_MultipleBond
+#  Exact match found for rate rule (Cds-HH_Cds-HH;CdsJ-H)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 23
+reaction('C2H4(8) + C2H3(13) <=> C4H7(28)', [2.860000e+04, 2.41, 1.8])
+#  Reaction index: Chemkin #24; RMG #97
+#  Template reaction: Intra_R_Add_Exocyclic
+#  Exact match found for rate rule (R4_S_D;doublebond_intra_2H_pri;radadd_intra_cs2H)
+
+# Reaction 24
+reaction('C4H7(28) <=> C4H7(38)', [3.840000e+10, 0.21, 8.78])
+#  Reaction index: Chemkin #25; RMG #82
+#  Template reaction: R_Addition_MultipleBond
+#  Exact match found for rate rule (Ct-H_Ct-H;CsJ-HHH)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 25
+reaction('C#C(25) + CH3(2) <=> C3H5(32)', [1.338000e+05, 2.41, 6.77])
+#  Reaction index: Chemkin #26; RMG #79
+#  Template reaction: R_Recombination
+#  Exact match found for rate rule (Cd_pri_rad;Cd_pri_rad)
+
+# Reaction 26
+reaction('C2H3(13) + C2H3(13) <=> C4H6(30)', [7.230000e+13, 0.0, 0.0])
+#  Reaction index: Chemkin #27; RMG #98
+#  Template reaction: R_Addition_MultipleBond
+#  Exact match found for rate rule (Cds-CdH_Cds-HH;HJ)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 27
+reaction('C4H6(30) + H(4) <=> C4H7(28)', [3.240000e+08, 1.64, 2.4])
+#  Reaction index: Chemkin #28; RMG #111
+#  Template reaction: Disproportionation
+#  Estimated using template (C_methyl;Cpri_Rrad) for rate rule (C_methyl;C/H2/De_Csrad)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 28
+reaction('C4H7(28) + CH3(2) <=> C4H6(30) + C(6)', [2.300000e+13, -0.32, 0.0])
+#  Reaction index: Chemkin #29; RMG #121
+#  Template reaction: Disproportionation
+#  Estimated using template (C_pri_rad;Cpri_Rrad) for rate rule (C_rad/H2/Cs;C/H2/De_Csrad)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 29
+reaction('C4H7(28) + C2H5(3) <=> ethane(1) + C4H6(30)', [2.009000e+12, 0.0, -0.043])
+#  Reaction index: Chemkin #30; RMG #132
+#  Template reaction: Disproportionation
+#  Estimated using template (H_rad;Cpri_Rrad) for rate rule (H_rad;C/H2/De_Csrad)
+#  Multiplied by reaction path degeneracy 4
+
+# Reaction 30
+reaction('C4H7(28) + H(4) <=> H2(12) + C4H6(30)', [7.240000e+12, 0.0, 0.0])
+#  Reaction index: Chemkin #31; RMG #163
+#  Template reaction: Disproportionation
+#  Estimated using template (Cd_pri_rad;Cpri_Rrad) for rate rule (Cd_pri_rad;C/H2/De_Csrad)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 31
+reaction('C2H3(13) + C4H7(28) <=> C2H4(8) + C4H6(30)', [2.420000e+12, 0.0, 0.0])
+#  Reaction index: Chemkin #32; RMG #104
+#  Template reaction: intra_H_migration
+#  Exact match found for rate rule (R2H_S;C_rad_out_H/OneDe;Cs_H_out_2H)
+#  Multiplied by reaction path degeneracy 3
+
+# Reaction 32
+reaction('C4H7(42) <=> C4H7(28)', [6.180000e+09, 1.22, 47.8])
+#  Reaction index: Chemkin #33; RMG #312
+#  Template reaction: Disproportionation
+#  Estimated using template (C_rad/H2/Cs;Cmethyl_Csrad) for rate rule (C_rad/H2/Cs;Cmethyl_Csrad/H/Cd)
+#  Multiplied by reaction path degeneracy 3
+
+# Reaction 33
+reaction('C4H7(42) + C2H5(3) <=> ethane(1) + C4H6(30)', [6.900000e+13, -0.35, 0.0])
+#  Reaction index: Chemkin #34; RMG #325
+#  Template reaction: Disproportionation
+#  Estimated using template (C_methyl;Cmethyl_Csrad) for rate rule (C_methyl;Cmethyl_Csrad/H/Cd)
+#  Multiplied by reaction path degeneracy 3
+
+# Reaction 34
+reaction('C4H7(42) + CH3(2) <=> C4H6(30) + C(6)', [6.570000e+14, -0.68, 0.0])
+#  Reaction index: Chemkin #35; RMG #326
+#  Template reaction: R_Addition_MultipleBond
+#  Exact match found for rate rule (Cds-HH_Cds-CdH;HJ)
+#  Multiplied by reaction path degeneracy 2
+
+# Reaction 35
+reaction('C4H6(30) + H(4) <=> C4H7(42)', [4.620000e+08, 1.64, -0.47])
+#  Reaction index: Chemkin #36; RMG #330
+#  Template reaction: Disproportionation
+#  Estimated using template (Cd_pri_rad;Cmethyl_Csrad) for rate rule (Cd_pri_rad;Cmethyl_Csrad/H/Cd)
+#  Multiplied by reaction path degeneracy 3
+
+# Reaction 36
+reaction('C2H3(13) + C4H7(42) <=> C2H4(8) + C4H6(30)', [4.560000e+14, -0.7, 0.0])
+#  Reaction index: Chemkin #37; RMG #335
+#  Template reaction: Disproportionation
+#  Estimated using template (H_rad;Cmethyl_Csrad) for rate rule (H_rad;Cmethyl_Csrad/H/Cd)
+#  Multiplied by reaction path degeneracy 6
+
+# Reaction 37
+reaction('C4H7(42) + H(4) <=> H2(12) + C4H6(30)', [2.166000e+13, 0.0, 0.0])
