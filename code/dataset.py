@@ -31,10 +31,13 @@ class Dataset:
             thresh = threshold_otsu(image)
             image = image > thresh
             image = np.invert(image)
-            
-            linesList.append(get_hough_lines(image))
+            lines = get_hough_lines(image)
+            lines = sorted(lines,key=lambda x: -x.length)
+            if type(lines) != list:
+                lines = [lines]
+            linesList.append(lines)
         
-        print smiles 
+        #print smiles 
         self.smiles = smiles
 
 #        for j,lines in enumerate(linesList):
@@ -72,8 +75,8 @@ class Dataset:
         
         self.linesList = linesList
         
-        for lines in linesList:
-            print len(lines)
+        #for lines in linesList:
+         #   print len(lines)
         
     
     def getLoss(self,params):
@@ -84,10 +87,13 @@ class Dataset:
         linesList = self.linesList
         smiles = self.smiles
         for i,lines in enumerate(linesList):
+            
             if test(lines,smiles[i],params):
                 pass
             else:
                 loss += 1.0
+                #print len(lines)
+                #print [line.order for line in lines]
         
         return loss
     

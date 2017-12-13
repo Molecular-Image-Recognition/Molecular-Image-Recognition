@@ -22,7 +22,8 @@ def lines_to_graph(lines, params):
     max_angle_bond = params[6]
     node_radius = params[7]
     
-
+    
+    
     i=0
 	# merge lines
     while i < len(lines):
@@ -32,10 +33,11 @@ def lines_to_graph(lines, params):
 
             line1 = lines[i]
             line2 = lines[j]
-            
+            order = max(line1.order,line2.order)
             dist, angle, width = line1.getDifference(line2)
             if dist < min_dist_merge and angle < min_angle_merge and width < min_width_merge:
                 merged = combineLines([line1, line2])
+                merged.order = order
                 lines[i] = merged
                 del lines[j]
                 didmerge = True
@@ -79,6 +81,7 @@ def lines_to_graph(lines, params):
         
         i += 1
 
+    plotLines(lines)
     # deal with high order bonds
     i = 0
     while i < len(lines) - 1:
@@ -91,7 +94,7 @@ def lines_to_graph(lines, params):
             dist, angle, width = line1.getDifference(line2)
             proj = line1.getProjOverlap(line2)
             
-            if min_dist_bond < dist and dist < max_dist_bond and angle < max_angle_bond:# and proj > 0.2:
+            if min_dist_bond < dist and dist < max_dist_bond and angle < max_angle_bond and proj > 0.2:
                 # remove the shorter of the lines and increment order
                 if line1.length < line2.length:
                     lines[j].order += 1
@@ -109,12 +112,14 @@ def lines_to_graph(lines, params):
 	# join bonds together and return the adjacency matrix generated
     lines = combinePoints(lines, node_radius)
     
-    
+    iters = 0
     i = 0
     while i < len(lines) - 1:
         j = i + 1
         while j < len(lines):
-            
+            iters += 1
+            if iters > 1000: #give up
+                return lines
             line1 = lines[i]
             line2 = lines[j]
             
@@ -129,29 +134,48 @@ def lines_to_graph(lines, params):
                 newlines = line1.pointSplit(c)
                 lines[i] = newlines[0]
                 lines.append(newlines[1])
-                i -= 1
+                i = -1
                 break
             elif L1d > 1e-6 and L1d < node_radius:
                 newlines = line1.pointSplit(d)
                 lines[i] = newlines[0]
                 lines.append(newlines[1])
-                i -= 1
+                i = -1
                 break
             elif L2a > 1e-6 and L2a < node_radius:
                 newlines = line2.pointSplit(a)
                 lines[j] = newlines[0]
                 lines.append(newlines[1])
-                j -= 1
             elif L2b > 1e-6 and L2b < node_radius:
                 newlines = line2.pointSplit(b)
                 lines[j] = newlines[0]
                 lines.append(newlines[1])
-                j -= 1
-                
-            j += 1
+            else:
+                j += 1
+
         i += 1
 
     lines = combinePoints(lines, node_radius)
     
-        
+    for i,line1 in enumerate(lines):
+        for j,line2 in enumerate(lines):
+            if line1 == line2:
+                continue
+            elif line1.pts[0] == line2.pts[0] and line1.pts[1] == line2.pts[1]:
+                lines[i] = line2
+            elif line1.pts[1] == line2.pts[0] and line1.pts[0] == line2.pts[1]:
+                lines[i] = line2
+    
+    lineList = []
+    for line in lines:
+        lineList.append((line,))
+    
+    lineList = list(set(lineList))
+    
+    lines = []
+    for line in lineList:
+        lines.append(line[0])
+    
+    plotLines(lines)
+    
     return lines

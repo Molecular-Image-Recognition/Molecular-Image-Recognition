@@ -24,8 +24,12 @@ def test(lines,smiles,params):
     """
 
     m = Molecule().fromSMILES(smiles) #make actual molecule
-
-    lines = lines_to_graph(lines, params)
+    
+    try:
+        lines = lines_to_graph(lines, params)
+    except:
+        print lines,lines_to_graph(lines,params)
+        raise TypeError
     
     
     adj = getAdjMatrix(lines)
@@ -36,13 +40,14 @@ def test(lines,smiles,params):
         molecule.addHydrogens()
         rmgmol = molecule.toRMGmol()
     except:
-        print 'failed to generate molecule'
+        #print 'failed to generate molecule'
         print smiles
         plt.figure()
         plotLines(lines)
         return False
     boo = m.isIsomorphic(rmgmol)
     if not boo:
+        pass
         print smiles
         plt.figure()
         plotLines(lines)

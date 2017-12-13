@@ -161,23 +161,11 @@ class LineSegment(object):
         L2 = LineSegment([self.pts[1],pt])
         return [L1,L2]
         
-@jit  
+#@jit  
 def combineLines(lines):
     """
     combine the set of LineSegments in lines into one line segment
     """
-    xs = []
-    ys = []
-    outpts = []
-    for line in lines:
-        xs.append(line.pts[0].x)
-        xs.append(line.pts[1].x)
-        ys.append(line.pts[0].y)
-        ys.append(line.pts[1].y)
-    A = np.ones((len(ys),2))
-    A[:,0] = np.array(xs)
-    y = np.array(ys)
-    m,b = np.linalg.lstsq(A,y)[0]
 
     s = 0.0
     pts = []
@@ -337,4 +325,13 @@ def get_hough_lines(image):
 def plotLines(lines):
     plt.figure()
     for line in lines:
-        plt.plot((line.pts[0].x, line.pts[1].x), (line.pts[0].y, line.pts[1].y))
+        axes = plt.plot((line.pts[0].x, line.pts[1].x), (line.pts[0].y, line.pts[1].y), linewidth = 1+3*(line.order-1))
+    axes = axes[0].axes
+    #print axes.get_xlim()
+   # ax[0].imshow(fig,origin='upper')
+    #plt.xlim(axes.get_xlim[1],axes.get_xlim[0])
+    plt.ylim(axes.get_ylim()[1],axes.get_ylim()[0])
+
+
+   # ax[1].imshow(edges, cmap=plt.gray())
+        
